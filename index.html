@@ -24,13 +24,13 @@ html, body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  transition: opacity 0.3s ease;
+  transition: background-image 0.5s ease;
 }
 
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.45);
+  background: rgba(0,0,0,0.50);
 }
 
 .card {
@@ -44,16 +44,18 @@ html, body {
   padding: 28px 22px;
   text-align: center;
   border-radius: 24px;
-  background: rgba(255,255,255,0.94);
+  background: rgba(255,255,255,0.95);
   box-shadow: 0 10px 40px rgba(0,0,0,0.35);
 }
 
+/* DP - ONLY FRONT */
 .profile {
-  width: 95px;
-  height: 95px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   object-fit: cover;
   border: 4px solid white;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.25);
 }
 
 h1 {
@@ -63,7 +65,14 @@ h1 {
 
 .sub {
   color: #555;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.share-count {
+  font-size: 15px;
+  color: #666;
+  margin: 12px 0;
 }
 
 button {
@@ -77,69 +86,251 @@ button {
   cursor: pointer;
 }
 
+.share {
+  background: #25D366;
+  color: white;
+}
+
+.telegram {
+  background: #229ED9;
+  color: white;
+}
+
 .enter {
   background: #128c7e;
   color: white;
+  display: none;
+}
+
+.status {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #f1f1f1;
+  color: #333;
+  font-size: 14px;
+}
+
+.success {
+  background: #e7f8ed;
+  color: #137333;
 }
 </style>
 </head>
 
 <body>
 
+<!-- BACKGROUND -->
 <div class="background" id="background"></div>
 <div class="overlay"></div>
 
 <div class="card">
 
-  <!-- यहाँ प्रोफाइल फोटो सेट की गई है -->
-  <img class="profile" src="E2867d5c12ebdd22e5d7a0eaa8e98382.jpg" alt="Group">
+  <!-- YOUR DP - ONLY FRONT -->
+  <img
+    class="profile"
+    src="E2867d5c12ebdd22e5d7a0eaa8e98382.jpg"
+    alt="Group"
+  >
 
   <h1>Girls Cum 🥵💦</h1>
 
   <div class="sub">
     Join our WhatsApp group
+    <br>
+    Share this page with 2 people to continue.
   </div>
 
-  <button class="enter" onclick="enterGroup()">
+  <div class="share-count" id="shareCount">
+    Shares completed: 0 / 2
+  </div>
+
+  <!-- WHATSAPP SHARE -->
+  <button class="share" onclick="shareWhatsApp()">
+    Share on WhatsApp
+  </button>
+
+  <!-- TELEGRAM SHARE -->
+  <button class="telegram" onclick="shareTelegram()">
+    Share on Telegram
+  </button>
+
+  <div class="status" id="status">
+    Please complete 2 share actions.
+  </div>
+
+  <!-- ONLY AFTER 2 SHARE ACTIONS -->
+  <button class="enter" id="enterButton" onclick="enterGroup()">
     Enter Group
   </button>
 
 </div>
 
+
 <script>
 
-/* BACKGROUND PHOTOS (AGAR CHAHIYE TO) */
+/* =========================
+   BACKGROUND PHOTOS
+   ========================= */
+
 const backgrounds = [
-  "E2867d5c12ebdd22e5d7a0eaa8e98382.jpg",
+
   "D39bafd1559ac1ed8c81262bf92b67b0.jpg",
+
   "6a0d57d280da3ff55e2a45dc4d65fbac.jpg",
+
   "4da4a53922e4e5f1a29407f1b3d30857.jpg",
+
   "32f5079aacb0aaa6fcace8eec2114be7.jpg"
+
 ];
 
 let current = 0;
+
 const bg = document.getElementById("background");
 
+
 function changeBackground() {
-  bg.style.backgroundImage = "url('" + backgrounds[current] + "')";
+
+  bg.style.backgroundImage =
+    "url('" + backgrounds[current] + "')";
 
   current++;
 
   if (current >= backgrounds.length) {
     current = 0;
   }
+
 }
 
-/* FIRST PHOTO */
+
+/* FIRST BACKGROUND */
 changeBackground();
 
-/* HAR 1 SECOND MEIN CHANGE */
+/* CHANGE EVERY 1 SECOND */
 setInterval(changeBackground, 1000);
 
-/* WHATSAPP GROUP */
+
+/* =========================
+   SHARE SYSTEM
+   ========================= */
+
+let shares = 0;
+
+const requiredShares = 2;
+
+const shareCount =
+  document.getElementById("shareCount");
+
+const status =
+  document.getElementById("status");
+
+const enterButton =
+  document.getElementById("enterButton");
+
+
+function updateShareStatus() {
+
+  shareCount.innerText =
+    "Shares completed: " +
+    shares +
+    " / " +
+    requiredShares;
+
+  if (shares >= requiredShares) {
+
+    status.innerText =
+      "✓ Verification complete. You can now enter the group.";
+
+    status.classList.add("success");
+
+    enterButton.style.display = "block";
+
+  }
+
+}
+
+
+/* =========================
+   WHATSAPP SHARE
+   ========================= */
+
+function shareWhatsApp() {
+
+  const pageURL =
+    window.location.href;
+
+  const message =
+    "Join this WhatsApp group: " +
+    pageURL;
+
+  const whatsappURL =
+    "https://wa.me/?text=" +
+    encodeURIComponent(message);
+
+  window.open(
+    whatsappURL,
+    "_blank"
+  );
+
+  registerShare();
+
+}
+
+
+/* =========================
+   TELEGRAM SHARE
+   ========================= */
+
+function shareTelegram() {
+
+  const pageURL =
+    window.location.href;
+
+  const telegramURL =
+    "https://t.me/share/url?url=" +
+    encodeURIComponent(pageURL) +
+    "&text=" +
+    encodeURIComponent(
+      "Join this WhatsApp group"
+    );
+
+  window.open(
+    telegramURL,
+    "_blank"
+  );
+
+  registerShare();
+
+}
+
+
+/* =========================
+   COUNT SHARE ACTION
+   ========================= */
+
+function registerShare() {
+
+  if (shares < requiredShares) {
+
+    shares++;
+
+    updateShareStatus();
+
+  }
+
+}
+
+
+/* =========================
+   ENTER GROUP
+   ========================= */
+
 function enterGroup() {
+
   window.location.href =
     "https://chat.whatsapp.com/IuzzLjwwTz319l2ieYw81R";
+
 }
 
 </script>
