@@ -93,7 +93,7 @@ button {
 
   <img class="profile" src="https://via.placeholder.com/200" alt="Group">
 
- <h1>Girls Cum 🥵💦</h1>
+  <h1>Girls Cum 🥵💦</h1>
 
   <div class="sub">
     Join our WhatsApp group
@@ -109,20 +109,17 @@ button {
 
 /* YAHAN APNI PHOTOS KE FILE NAME DALO */
 const backgrounds = [
-  "32f5079aacb0aaa6fcace8eec2114be7.jpg",
-  "4da4a53922e4e5f1a29407f1b3d30857.jpg",
+  "D39bafd1559ac1ed8c81262bf92b67b0.jpg",
   "6a0d57d280da3ff55e2a45dc4d65fbac.jpg",
-  "d39bafd1559ac1ed8c81262bf92b67b0.jpg"
-];
+  "4da4a53922e4e5f1a29407f1b3d30857.jpg",
+  "32f5079aacb0aaa6fcace8eec2114be7.jpg"
 ];
 
 let current = 0;
 const bg = document.getElementById("background");
 
 function changeBackground() {
-  bg.style.backgroundImage =
-    bg.style.backgroundImage = "url('" + backgrounds[current] + "')";
-  
+  bg.style.backgroundImage = "url('" + backgrounds[current] + "')";
 
   current++;
 
@@ -136,7 +133,6 @@ changeBackground();
 
 /* HAR 1 SECOND MEIN CHANGE */
 setInterval(changeBackground, 1000);
-
 
 /* WHATSAPP GROUP */
 function enterGroup() {
