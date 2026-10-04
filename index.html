@@ -2,202 +2,145 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Group Invite</title>
 
 <style>
-*{box-sizing:border-box}
-body{
-  margin:0;
-  min-height:100vh;
-  font-family:Arial,sans-serif;
-  color:#fff;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  overflow:hidden;
-  background:#111;
+* {
+  box-sizing: border-box;
 }
-.bg{
-  position:fixed;
-  inset:0;
-  background-size:cover;
-  background-position:center;
-  transition:background-image 1s ease;
-  filter:brightness(.5);
-  z-index:-2;
+
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
 }
-.overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.35);
-  z-index:-1;
+
+.background {
+  position: fixed;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: opacity 0.3s ease;
 }
-.card{
-  width:calc(100% - 30px);
-  max-width:400px;
-  text-align:center;
-  padding:30px 22px;
-  border-radius:25px;
-  background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.2);
-  backdrop-filter:blur(12px);
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
 }
-.profile{
-  width:105px;
-  height:105px;
-  border-radius:50%;
-  object-fit:cover;
-  border:4px solid white;
+
+.card {
+  position: relative;
+  z-index: 2;
+  width: calc(100% - 30px);
+  max-width: 400px;
+  margin: auto;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 28px 22px;
+  text-align: center;
+  border-radius: 24px;
+  background: rgba(255,255,255,0.94);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.35);
 }
-h1{font-size:27px;margin:15px 0 8px}
-.sub{opacity:.8;margin-bottom:22px}
-.progress{
-  margin:20px 0;
-  font-size:18px;
-  font-weight:bold;
+
+.profile {
+  width: 95px;
+  height: 95px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid white;
 }
-button{
-  width:100%;
-  padding:16px;
-  margin-top:10px;
-  border:0;
-  border-radius:14px;
-  font-size:17px;
-  font-weight:bold;
+
+h1 {
+  margin: 15px 0 8px;
+  font-size: 27px;
 }
-.share{
-  background:#fff;
-  color:#111;
+
+.sub {
+  color: #555;
+  margin-bottom: 25px;
 }
-.enter{
-  background:#19c37d;
-  color:#fff;
+
+button {
+  width: 100%;
+  border: 0;
+  border-radius: 14px;
+  padding: 16px;
+  margin-top: 12px;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
 }
-.enter:disabled{
-  background:#666;
-  opacity:.6;
-}
-.note{
-  font-size:12px;
-  opacity:.65;
-  margin-top:18px;
+
+.enter {
+  background: #128c7e;
+  color: white;
 }
 </style>
 </head>
 
 <body>
 
-<div class="bg" id="bg"></div>
+<div class="background" id="background"></div>
 <div class="overlay"></div>
 
 <div class="card">
 
-<img
-class="profile"
-src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300"
-alt="Group">
+  <img class="profile" src="https://via.placeholder.com/200" alt="Group">
 
-<h1>🔥 MY GROUP</h1>
+  <h1>🔥 CASERO XXX</h1>
 
-<div class="sub">
-Welcome to our group
-</div>
+  <div class="sub">
+    Join our WhatsApp group
+  </div>
 
-<div class="progress" id="progress">
-Share: 0 / 2
-</div>
-
-<button class="share" onclick="shareStep()">
-↗ Share
-</button>
-
-<button class="enter" id="enter" disabled onclick="openGroup()">
-🔒 Enter Group
-</button>
-
-<div class="note">
-Complete the sharing step to continue.
-</div>
+  <button class="enter" onclick="enterGroup()">
+    Enter Group
+  </button>
 
 </div>
 
 <script>
 
-/* BACKGROUND PHOTOS */
-const photos = [
-"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1200",
-"https://images.unsplash.com/photo-1497250681960-ef046c08a56e?w=1200",
-"https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1200",
-"https://images.unsplash.com/photo-1500534623283-312aade485b7?w=1200"
+/* YAHAN APNI PHOTOS KE FILE NAME DALO */
+const backgrounds = [
+  "photo1.jpg",
+  "photo2.jpg",
+  "photo3.jpg",
+  "photo4.jpg",
+  "photo5.jpg"
 ];
 
-let photoIndex = 0;
+let current = 0;
+const bg = document.getElementById("background");
 
-function changePhoto(){
-  document.getElementById("bg").style.backgroundImage =
-    "url('" + photos[photoIndex] + "')";
-  photoIndex = (photoIndex + 1) % photos.length;
-}
+function changeBackground() {
+  bg.style.backgroundImage =
+    "url('" + backgrounds[current] + "')";
 
-changePhoto();
-setInterval(changePhoto,5000);
+  current++;
 
-
-/* SHARE PROGRESS */
-let shares = 0;
-
-async function shareStep(){
-
-  if(navigator.share){
-
-    try{
-
-      await navigator.share({
-        title:"Join our group",
-        text:"Check out this group",
-        url:window.location.href
-      });
-
-      shares++;
-
-    }catch(e){
-
-      return;
-
-    }
-
-  }else{
-
-    await navigator.clipboard.writeText(window.location.href);
-    shares++;
-
-    alert("Link copied. Share it with your friends.");
-
-  }
-
-  if(shares > 2) shares = 2;
-
-  document.getElementById("progress").innerText =
-    "Share: " + shares + " / 2";
-
-  if(shares >= 2){
-
-    const button = document.getElementById("enter");
-
-    button.disabled = false;
-    button.innerHTML = "✅ Enter Group";
-
+  if (current >= backgrounds.length) {
+    current = 0;
   }
 }
 
+/* FIRST PHOTO */
+changeBackground();
 
-/* YOUR WHATSAPP GROUP */
-function openGroup(){
+/* HAR 1 SECOND MEIN CHANGE */
+setInterval(changeBackground, 1000);
 
+
+/* WHATSAPP GROUP */
+function enterGroup() {
   window.location.href =
-  "https://chat.whatsapp.com/IuzzLjwwTz319l2ieYw81R";
-
+    "https://chat.whatsapp.com/IuzzLjwwTz319l2ieYw81R";
 }
 
 </script>
